@@ -1,2 +1,3 @@
-public class GamePaused {
+public class GamePaused
+{
 }

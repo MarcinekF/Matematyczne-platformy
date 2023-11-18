@@ -1,11 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -19,9 +20,11 @@ public class GamePanel extends JPanel implements Runnable
         showRewards
     }
 
-    public static GameState gameState = GameState.menu;
+    Image background = ImageIO.read(new File("assets/Background/Green.png"));
     int width = 800;
     int height = 600;
+    List<List<Integer>> backgroundCords = getBackgroundCords(background, width, height);
+    public static GameState gameState = GameState.menu;
     int FPS = 60;
     int velocity = 4;
     public int gravity = 0;
@@ -43,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable
     boolean correctAnswer = false;
     boolean incorrectAnswer = false;
     boolean platformMoved = false;
+
     public GamePanel() throws IOException
     {
         this.setPreferredSize(new Dimension(width, height)); //ScreenSize
@@ -203,6 +207,13 @@ public class GamePanel extends JPanel implements Runnable
                     }
                 }
             }
+            case showRewards ->
+            {
+                if (keyH.enterPressed)
+                {
+                    gameState = GameState.paused;
+                }
+            }
             case menu ->
             {
                 if(keyH.upPressed)
@@ -329,10 +340,19 @@ public class GamePanel extends JPanel implements Runnable
 
             case paused -> menu.gamePaused(g);
 
-            case showRewards -> rewardManager.showRewards(g);
+            case showRewards -> rewardManager.showRewards(g, width, height);
 
             case running ->
             {
+                int i =0;
+                for(List<Integer> backgroundCord : backgroundCords)
+                {
+                    for (int cord : backgroundCord)
+                    {
+                        g.drawImage(background, cord, i*background.getWidth(null), null);
+                    }
+                    i++;
+                }
                 for (Platform p : platformArrayList) {
                     g.drawImage(p.sprite, p.rect.x, p.rect.y, null);
                     if (!Objects.equals(p.answer, "none")) {
@@ -593,5 +613,23 @@ public class GamePanel extends JPanel implements Runnable
                 incorrectAnswer = false;
             }
         }
+    }
+
+    private List<List<Integer>> getBackgroundCords(Image background, int screenWidth, int screenHeight)
+    {
+        List<List<Integer>> backgroundCords = new ArrayList<>();
+
+        double imageWidth = background.getWidth(null);
+        double imageHeight = background.getHeight(null);
+        for (int i = 0; i <= (double)screenWidth / imageWidth ; i++)
+        {
+            backgroundCords.add(new ArrayList<>());
+            for(int j=0; j<= (double)screenHeight / imageHeight + 3; j++)
+            {
+                backgroundCords.get(i).add(j*background.getHeight(null));
+            }
+        }
+        System.out.println(backgroundCords.get(0));
+        return backgroundCords;
     }
 }

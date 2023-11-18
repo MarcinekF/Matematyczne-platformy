@@ -10,6 +10,7 @@ public class RewardManager {
     BufferedImage sprite;
     int index = 0;
     public static int streak;
+    Font customFont = new Font("Arial", Font.PLAIN, 18);
 
     public RewardManager() throws IOException
     {
@@ -32,19 +33,21 @@ public class RewardManager {
             index = 0;
         }
         int y = 0;
-        if((Player.streak) >= 5 && (Player.streak<10))
+        if((Player.streak >= 5 )&& (Player.streak <10))
         {
             y = 52 * 2;
         }
-        else if((Player.streak) >= 10 && (Player.streak<15))
+        else if((Player.streak) >= 10 && (Player.streak < 15))
         {
             y = 52;
         }
         sprite = sheet.getSubimage(index*64,y,64,52);
     }
 
-    public void showRewards(Graphics g)
+    public void showRewards(Graphics g, int screenWidth, int screenHeight)
     {
         g.drawString("Funkcja w budowie", 100, 100);
+        g.setFont(customFont);
+        g.drawString("Powrót", screenWidth/2, screenHeight - 100);
     }
 }

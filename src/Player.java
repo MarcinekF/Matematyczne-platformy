@@ -14,6 +14,7 @@ public class Player
     int jumpLimit;
     int animationIndex;
     Rectangle rect;
+    public static int rewards;
     public static int lives;
     public static int points;
     public static int streak;
@@ -28,6 +29,7 @@ public class Player
         this.jumpLimit  = 1;
         this.animationIndex = 0;
         this.lives = 3;
+        this.rewards = 0;
         this.answer ="none";
         this.points = 0;
         this.streak = 0;
