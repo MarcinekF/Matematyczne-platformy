@@ -444,7 +444,7 @@ public class GamePanel extends JPanel implements Runnable
                     p.Animated = true;
                     gravity = 1;
                     platformArrayList.add(p);
-                    player.updateSheet("assets/MainCharacters/MaskDude/fall.png");
+                    player.updateSheet("assets/ScarfKitten/fall.png");
                     break;
                 }
                 else
@@ -629,7 +629,6 @@ public class GamePanel extends JPanel implements Runnable
                 backgroundCords.get(i).add(j*background.getHeight(null));
             }
         }
-        System.out.println(backgroundCords.get(0));
         return backgroundCords;
     }
 }
