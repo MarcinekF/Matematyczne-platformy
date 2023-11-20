@@ -667,6 +667,10 @@ public class GamePanel extends JPanel implements Runnable
                 incorrectAnswer = false;
             }
         }
+        else if(player.jumpLimit == 1)
+        {
+            incorrectAnswer = false;
+        }
     }
 
     private List<List<Integer>> getBackgroundCords(Image background, int screenWidth, int screenHeight)
