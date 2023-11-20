@@ -22,7 +22,7 @@ public class KeyHandler implements KeyListener {
             Player.lives = 0;
             GamePanel.timeLeft = 10;
         }
-        if((saveNameFlag) && (e.getKeyChar() != KeyEvent.VK_BACK_SPACE))
+        if((saveNameFlag) && (e.getKeyChar() != KeyEvent.VK_BACK_SPACE) && (saveName.length() < 12))
         {
             saveName.append(e.getKeyChar());
         }

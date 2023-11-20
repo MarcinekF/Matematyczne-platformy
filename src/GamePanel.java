@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable
     int answer;
     public static int timeLeft = 30;
     long timeLeftDelay = System.nanoTime();
+    long currentTime = System.nanoTime();
     Thread gameThread;
     boolean correctAnswer = false;
     boolean incorrectAnswer = false;
@@ -68,7 +69,6 @@ public class GamePanel extends JPanel implements Runnable
     { //Game loop
         double drawInterval = 1000000000 / FPS; // program delay 0.0166 sec
         double delta = 0;
-        long currentTime;
 
 
         while(gameThread != null)
@@ -101,7 +101,7 @@ public class GamePanel extends JPanel implements Runnable
                         }
                     }
                 }
-                if(lastTime - timeLeftDelay > 1000000000)
+                if((gameState == GameState.running) && (lastTime - timeLeftDelay > 1000000000))
                 {
                     timeLeftDelay = lastTime;
                     {
@@ -175,12 +175,12 @@ public class GamePanel extends JPanel implements Runnable
             {
                 if(keyH.upPressed)
                 {
-                    menu.pickedAction = (menu.pickedAction - 1 + 4) % 4;
+                    menu.pickedAction = (menu.pickedAction - 1 + 5) % 5;
                     keyH.upPressed = false;
                 }
                 else if (keyH.downPressed)
                 {
-                    menu.pickedAction = (menu.pickedAction + 1) % 4;
+                    menu.pickedAction = (menu.pickedAction + 1) % 5;
                     keyH.downPressed = false;
                 }
                 else if(keyH.enterPressed)
@@ -188,23 +188,29 @@ public class GamePanel extends JPanel implements Runnable
                     switch (menu.pickedAction)
                     {
                         case 0:
+                            gameState = GameState.running;
+                            keyH.enterPressed = false;
+                            break;
+                        case 1:
                             gameState = GameState.creatingSave;
                             keyH.saveNameFlag = true;
                             keyH.enterPressed = false;
                             break;
-                        case 1:
+                        case 2:
                             gameState = GameState.loadingSaves;
                             keyH.enterPressed = false;
                             break;
-                        case 2:
+                        case 3:
                             gameState = GameState.showRewards;
                             keyH.enterPressed = false;
                             break;
-                        case 3:
+                        case 4:
+                            platformArrayList.clear();
                             gameState = GameState.menu;
                             keyH.enterPressed = false;
                             break;
                     }
+                    menu.pickedAction = 0;
                 }
             }
             case showRewards ->
@@ -212,6 +218,8 @@ public class GamePanel extends JPanel implements Runnable
                 if (keyH.enterPressed)
                 {
                     gameState = GameState.paused;
+                    keyH.enterPressed = false;
+                    menu.pickedAction = 0;
                 }
             }
             case menu ->
@@ -238,6 +246,9 @@ public class GamePanel extends JPanel implements Runnable
                             platformArrayList.add(new Platform(width/2, height - 100,"none"));
                             generatePlatforms();
                             timeLeft = 30;
+                            timeLeftDelay = System.nanoTime();
+                            currentTime = System.nanoTime();
+                            timeLeftDelay = System.nanoTime();
                             gameState = GameState.running;
                             keyH.enterPressed = false;
                             break;
@@ -250,29 +261,38 @@ public class GamePanel extends JPanel implements Runnable
                             keyH.enterPressed = false;
                             break;
                     }
+                    menu.pickedAction = 0;
                 }
             }
             case loadingSaves ->
             {
                 if(keyH.upPressed)
                 {
-                    menu.pickedAction = (menu.pickedAction - 1 + Menu.savesList.length) % Menu.savesList.length;
+                    menu.pickedAction = (menu.pickedAction - 1 + Menu.savesList.length + 1) % (Menu.savesList.length + 1);
                     keyH.upPressed = false;
                 }
                 else if (keyH.downPressed)
                 {
-                    menu.pickedAction = (menu.pickedAction + 1) % Menu.savesList.length;
+                    menu.pickedAction = (menu.pickedAction + 1) % (Menu.savesList.length + 1);
                     keyH.downPressed = false;
                 }
                 if (keyH.enterPressed)
                 {
-                    String save = "saves/" + Menu.savesList[menu.pickedAction].getName();
-                    player = new Player(width/2, height - 164);
-                    try(BufferedReader br = new BufferedReader(new FileReader(save))){
-                        Player.lives = Integer.parseInt(br.readLine().trim());
-                        Player.points = Integer.parseInt(br.readLine().trim());
-                        Player.streak = Integer.parseInt(br.readLine().trim());
+                    if(menu.pickedAction == Menu.savesList.length)
+                    {
+                        keyH.enterPressed = false;
+                        if (!platformArrayList.isEmpty())
+                        {
+                            gameState = GameState.paused;
+                        }
+                        else
+                        {
+                            gameState = GameState.menu;
+                        }
+                        break;
                     }
+                    player = new Player(width/2, height - 164);
+                    menu.loadGame();
                     platformArrayList.clear();
                     platformArrayList.add(new Platform(width/2, height - 100,"none"));
                     answer = generateQuiz();
@@ -280,6 +300,8 @@ public class GamePanel extends JPanel implements Runnable
                     generatePlatforms();
                     gameState = GameState.running;
                     timeLeft = 30;
+                    timeLeftDelay = System.nanoTime();
+                    currentTime = System.nanoTime();
                     keyH.enterPressed = false;
                 }
             }
@@ -318,6 +340,7 @@ public class GamePanel extends JPanel implements Runnable
                             gameState = GameState.paused;
                             break;
                     }
+                    menu.pickedAction = 0;
                 }
             }
         }
@@ -361,9 +384,20 @@ public class GamePanel extends JPanel implements Runnable
                 }
                 g.drawImage(player.sprite, player.rect.x, player.rect.y, 64, 64, null);
 
-                if(Player.streak >= 5)
+                if(Player.streak == 5)
                 {
-                    rewardManager.paintNewReward(g);
+                    Player.highestStreak = 5;
+                    rewardManager.paintNewReward(g, width, height);
+                }
+                if(Player.streak == 10)
+                {
+                    Player.highestStreak = 10;
+                    rewardManager.paintNewReward(g, width, height);
+                }
+                if(Player.streak == 15)
+                {
+                    Player.highestStreak = 15;
+                    rewardManager.paintNewReward(g, width, height);
                 }
 
                 if (Player.lives == 0)
@@ -384,30 +418,42 @@ public class GamePanel extends JPanel implements Runnable
                     g.drawString(question, width/2, 100);
                 }
 
-                else
-                {
-                    g.drawString(question, width/2, 100);
+                else {
+                    g.drawString(question, width / 2, 100);
                     g.drawString("Pozostałe życia: " + Player.lives, 10, 50);
                     g.drawString("Pozostały czas: " + timeLeft, 10, 80);
                     g.drawString("Punkty: " + Player.points, 10, 110);
-                    if(player.answer.equals("correct"))
-                    {
+                    if (player.answer.equals("correct")) {
                         g.setColor(Color.GREEN);
-                        g.drawString(String.valueOf(answer),width/2 + 80,100);
-                        g.drawString("Odpowiedz poprawna!", width/2 - 80, 140);
-                    }
-                    else if (player.answer.equals("incorrect"))
-                    {
+                        g.drawString(String.valueOf(answer), width / 2 + 80, 100);
+                        g.drawString("Odpowiedz poprawna!", width / 2 - 80, 140);
+                    } else if (player.answer.equals("incorrect")) {
                         g.setColor(Color.RED);
-                        g.drawString(String.valueOf(answer),width/2 + 80,100);
-                        g.drawString("Odpowiedz niepoprawna!", width/2 - 80, 140);
+                        g.drawString(String.valueOf(answer), width / 2 + 80, 100);
+                        g.drawString("Odpowiedz niepoprawna!", width / 2 - 80, 140);
                     }
+                }
+                try {
+                    checkPlayerOutside();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
 
     }
-
+    public void checkPlayerOutside() throws IOException {
+        if (player.rect.y > height )
+        {
+            player.rect.x = width/2;
+            player.rect.y = height - 164;
+            Player.lives --;
+            player.updateSheet("assets/ScarfKitten/hit.png");
+            gravity = 0;
+            keyH.spacePressed = false;
+            player.jumpLimit = 1;
+        }
+    }
     public void checkCollisions(Player player, ArrayList<Platform> platforms) throws IOException {
         for (Platform p : platforms)
         {
@@ -418,6 +464,8 @@ public class GamePanel extends JPanel implements Runnable
                 if (p.answer.equals(String.valueOf(answer)))
                 {
                     timeLeft = 30;
+                    timeLeftDelay = System.nanoTime();
+                    currentTime = System.nanoTime();
                     timeLeftDelay = System.nanoTime();
                     correctAnswer = true;
                     player.answer = "correct";
@@ -432,8 +480,14 @@ public class GamePanel extends JPanel implements Runnable
                 {
                     timeLeft = 30;
                     timeLeftDelay = System.nanoTime();
+                    currentTime = System.nanoTime();
+                    timeLeftDelay = System.nanoTime();
                     incorrectAnswer = true;
                     player.answer = "incorrect";
+                    if(player.highestStreak < Player.streak)
+                    {
+                        player.highestStreak = Player.streak;
+                    }
                     Player.streak = 0;
                     Player.lives --;
                     for(int i =0; i<3;i++)

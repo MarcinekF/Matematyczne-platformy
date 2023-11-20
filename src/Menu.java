@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +11,7 @@ public class Menu
 {
     Font customFont = new Font("Arial", Font.PLAIN, 16);
     Font pickedActionFont = new Font("Arial", Font.PLAIN, 18);
-    int pickedAction = 0;
+    int pickedAction;
     File savesFolder;
     public static File [] savesList;
 
@@ -29,14 +26,16 @@ public class Menu
     {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        this.pickedAction = 0;
 
         savesFolder = new File("saves");
         savesList = savesFolder.listFiles();
 
-        gamePausedOptions.put("Zapis gry", 0);
-        gamePausedOptions.put("Wczytanie gry", 1);
-        gamePausedOptions.put("Wyswietl nagrody", 2);
-        gamePausedOptions.put("Wyjście do głownego menu", 3);
+        gamePausedOptions.put("Kontynuuj rozgrywkę", 0);
+        gamePausedOptions.put("Zapis gry", 1);
+        gamePausedOptions.put("Wczytanie gry", 2);
+        gamePausedOptions.put("Wyswietl nagrody", 3);
+        gamePausedOptions.put("Wyjście do głownego menu", 4);
 
         mainMenuOptions.put("Nowa gra", 0);
         mainMenuOptions.put("Wczytanie gry", 1);
@@ -86,13 +85,15 @@ public class Menu
     }
     public void loadGame(Graphics g)
     {
-        g.drawString("Wybierz plik do wczytania", screenWidth / 2 - 140, screenHeight / 4);
+        g.drawString("Wybierz plik do wczytania", screenWidth / 2 - 110, screenHeight / 4);
         g.setFont(customFont);
 
         if (savesList.length == 0)
         {
-            g.setFont(pickedActionFont);
             g.drawString("Nie znalezniono żadnych zapisów!", screenWidth/2 - 100, screenHeight/2);
+            pickedAction = 0;
+            g.setFont(pickedActionFont);
+            g.drawString("Powrot", screenWidth/2 - 30,screenHeight/2 + 45);
         }
         else
         {
@@ -113,6 +114,11 @@ public class Menu
                 g.drawString(name, screenWidth/2 - 30, screenHeight/2 + i * 30);
                 i++;
             }
+            if(pickedAction == savesList.length )
+            {
+                g.setFont(pickedActionFont);
+            }
+            g.drawString("Powrot", screenWidth/2 - 30,screenHeight/2 + i * 30 + 10);
         }
     }
     public void createSave(Graphics g)
@@ -138,20 +144,32 @@ public class Menu
             i++;
         }
     }
+    public void loadGame() throws IOException {
+
+        String save = "saves/" + savesList[pickedAction].getName();
+        try(BufferedReader br = new BufferedReader(new FileReader(save))){
+            Player.lives = Integer.parseInt(br.readLine().trim());
+            Player.points = Integer.parseInt(br.readLine().trim());
+            Player.streak = Integer.parseInt(br.readLine().trim());
+            Player.highestStreak = Integer.parseInt(br.readLine().trim());
+        }
+        pickedAction = 0;
+    }
     public void saveGame(String filePath)
     {
         String var1 = String.valueOf(Player.lives);
         String var2 = String.valueOf(Player.points);
         String var3 = String.valueOf(Player.streak);
+        String var4 = String.valueOf(Player.highestStreak);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath)))
         {
             writer.write((var1 +"\n"));
             writer.write((var2 +"\n"));
             writer.write((var3 +"\n"));
+            writer.write((var4 +"\n"));
 
         } catch (IOException e){
-            System.out.println("Cannot save the game");
             e.printStackTrace();
         }
         savesList = savesFolder.listFiles();

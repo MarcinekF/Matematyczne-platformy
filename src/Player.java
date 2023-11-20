@@ -18,6 +18,7 @@ public class Player
     public static int lives;
     public static int points;
     public static int streak;
+    public static int highestStreak;
     String answer;
 
     public Player(int x, int y) throws IOException {
@@ -28,11 +29,12 @@ public class Player
         this.sheetWidth = 11;
         this.jumpLimit  = 1;
         this.animationIndex = 0;
-        this.lives = 3;
-        this.rewards = 0;
-        this.answer ="none";
-        this.points = 0;
-        this.streak = 0;
+        highestStreak = 0;
+        lives = 3;
+        rewards = 0;
+        answer ="none";
+        points = 0;
+        streak = 0;
     }
 
     public void updateSprite()
