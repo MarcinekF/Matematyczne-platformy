@@ -101,11 +101,26 @@ public class GamePanel extends JPanel implements Runnable
                         }
                     }
                 }
-                if((gameState == GameState.running) && (lastTime - timeLeftDelay > 1000000000))
+                if(lastTime - timeLeftDelay > 1000000000)
                 {
                     timeLeftDelay = lastTime;
+                    timeLeft--;
+
+                    if(player.hit)
                     {
-                        timeLeft--;
+                        try {
+                            if(gravity == 0)
+                            {
+                                player.countHitTime();
+                            }
+                            else
+                            {
+                                player.hit = false;
+                                player.hitDelay = 0;
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
                 if (gravity == -1)
@@ -452,6 +467,7 @@ public class GamePanel extends JPanel implements Runnable
             gravity = 0;
             keyH.spacePressed = false;
             player.jumpLimit = 1;
+            player.hit = true;
         }
     }
     public void checkCollisions(Player player, ArrayList<Platform> platforms) throws IOException {
@@ -498,7 +514,7 @@ public class GamePanel extends JPanel implements Runnable
                     p.Animated = true;
                     gravity = 1;
                     platformArrayList.add(p);
-                    player.updateSheet("assets/ScarfKitten/fall.png");
+                    player.updateSheet("assets/ScarfKitten/hit.png");
                     break;
                 }
                 else

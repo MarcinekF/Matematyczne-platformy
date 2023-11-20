@@ -19,6 +19,8 @@ public class Player
     public static int points;
     public static int streak;
     public static int highestStreak;
+    boolean hit;
+    int hitDelay;
     String answer;
 
     public Player(int x, int y) throws IOException {
@@ -29,6 +31,7 @@ public class Player
         this.sheetWidth = 11;
         this.jumpLimit  = 1;
         this.animationIndex = 0;
+        this.hit = false;
         highestStreak = 0;
         lives = 3;
         rewards = 0;
@@ -70,6 +73,15 @@ public class Player
         {
             updateSheet("assets/ScarfKitten/jump.png");
             jumpLimit --;
+        }
+    }
+    public void countHitTime() throws IOException {
+        hitDelay++;
+        if(hitDelay <= 8)
+        {
+            hit = false;
+            hitDelay = 0;
+            updateSheet("assets/ScarfKitten/idle.png");
         }
     }
 }
