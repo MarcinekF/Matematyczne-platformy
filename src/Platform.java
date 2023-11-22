@@ -16,7 +16,7 @@ public class Platform
     boolean Animated = false;
     public Platform(int x, int y, String answer) throws IOException
     {
-        rect = new Rectangle(x, y, 57, 30);
+        rect = new Rectangle(x, y, 57, 10);
         this.answer = answer;
     }
 

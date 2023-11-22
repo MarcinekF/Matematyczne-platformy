@@ -14,6 +14,7 @@ public class Player
     int jumpLimit;
     int animationIndex;
     Rectangle rect;
+    Shape shape;
     public static int rewards;
     public static int lives;
     public static int points;
@@ -24,7 +25,7 @@ public class Player
     String answer;
 
     public Player(int x, int y) throws IOException {
-        rect = new Rectangle(x, y, 64, 64);
+        this.rect = new Rectangle(x, y, 32, 64);
         this.sheetFile = new File("assets/ScarfKitten/idle.png");
         this.sheet = ImageIO.read(sheetFile);
         this.sprite =sheet.getSubimage(0,0, 32, 32);
