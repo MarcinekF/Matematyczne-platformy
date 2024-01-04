@@ -1,0 +1,147 @@
+@startuml
+
+class Platform {
+  -sheetFile: File
+  -sheet: BufferedImage
+  -sprite: BufferedImage
+  -sheetWidth: int
+  -animationIndex: int
+  -rect: Rectangle
+  -answer: String
+  -Animated: boolean
+
+  +Platform(int, int, String)
+  +updateSprite(): boolean
+}
+
+class Player {
+  -sheetFile: File
+  -sheet: BufferedImage
+  -sprite: BufferedImage
+  -sheetWidth: int
+  -jumpLimit: int
+  -animationIndex: int
+  -rect: Rectangle
+  +rewards: int
+  +lives: int
+  +points: int
+  +streak: int
+  +highestStreak: int
+  -hit: boolean
+  -hitDelay: int
+  -answer: String
+
+  +Player(int, int)
+  +updateSprite(): void
+  +updateSheet(String): void
+  +landed(): void
+  +fall(): void
+  +jump(): void
+  +countHitTime(): void
+}
+
+class RewardManager {
+  -sheetFile: File
+  -sheet: BufferedImage
+  -sprite: BufferedImage
+  -spriteTrophyNo5: BufferedImage
+  -spriteTrophyNo10: BufferedImage
+  -spriteTrophyNo15: BufferedImage
+  -index: int
+  +streak: int
+  -customFont: Font
+  -warningFont: Font
+
+  +RewardManager()
+  +paintNewReward(Graphics, int, int): void
+  +updateSprite(): void
+  +showRewards(Graphics, int, int): void
+}
+
+class GamePanel extends JPanel implements Runnable {
+  -background: Image
+  -width: int
+  -height: int
+  -backgroundCords: List<List<Integer>>
+  +gameState: GameState
+  -FPS: int
+  -velocity: int
+  -gravity: int
+  -random: Random
+  -QandA: String[]
+  -platformArrayList: ArrayList<Platform>
+  -player: Player
+  -menu: Menu
+  -keyH: KeyHandler
+  -rewardManager: RewardManager
+  -lastTime: long
+  -playerAnimationTime: long
+  -customFont: Font
+  -question: String
+  -answer: int
+  -timeLeft: int
+  -timeLeftDelay: long
+  -currentTime: long
+  -gameThread: Thread
+  -correctAnswer: boolean
+  -incorrectAnswer: boolean
+  -platformMoved: boolean
+
+  +GamePanel()
+  +startGameThread(): void
+  +run(): void
+  +update(): void
+  +paintComponent(Graphics): void
+  +checkPlayerOutside(): void
+  +checkCollisions(Player, ArrayList<Platform>): void
+  +generateQuiz(): int
+  +generatePlatforms(): void
+  +movePlatformInY(): void
+  +platformGoBack(): void
+  +movePlatformInX(): void
+  +getBackgroundCords(Image, int, int): List<List<Integer>>
+}
+
+class KeyHandler implements KeyListener {
+  -rightPressed: boolean
+  -leftPressed: boolean
+  -spacePressed: boolean
+  -downPressed: boolean
+  -upPressed: boolean
+  -enterPressed: boolean
+  -saveNameFlag: boolean
+  +saveName: StringBuilder
+
+  +KeyHandler()
+  +keyTyped(KeyEvent): void
+  +keyPressed(KeyEvent): void
+  +keyReleased(KeyEvent): void
+}
+
+class Menu {
+  +pickedAction: int
+
+  +Menu(int, int)
+  +mainMenu(Graphics): void
+  +gamePaused(Graphics): void
+  +loadGame(): void
+  +saveGame(String): void
+  +createSave(Graphics): void
+}
+
+enum GameState {
+  running
+  paused
+  menu
+  loadingSaves
+  creatingSave
+  showRewards
+}
+GamePanel --|> GameState
+GamePanel --|> KeyHandler
+GamePanel --|> Player
+GamePanel --|> RewardManager
+GamePanel --|> Menu
+GamePanel --|> Platform
+
+@enduml

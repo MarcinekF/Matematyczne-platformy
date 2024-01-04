@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable
         showRewards
     }
 
-    Image background = ImageIO.read(new File("assets/Background/Green.png"));
+    Image background = ImageIO.read(new File("assets/Background/Purple.png"));
     int width = 800;
     int height = 600;
     List<List<Integer>> backgroundCords = getBackgroundCords(background, width, height);
@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable
     Player player = new Player(width/2, height - 164);
     Menu menu = new Menu(width, height);
     KeyHandler keyH = new KeyHandler();
+    MouseHandler mouseH = new MouseHandler();
     RewardManager rewardManager = new RewardManager();
     long lastTime = System.nanoTime();
     long playerAnimationTime = System.nanoTime();
@@ -54,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
         this.setFocusable(true);
 
     }
@@ -399,17 +401,17 @@ public class GamePanel extends JPanel implements Runnable
                 }
                 g.drawImage(player.sprite, player.rect.x, player.rect.y, 64, 64, null);
 
-                if(Player.streak == 5)
+                if((Player.streak == 5) && (Player.streak >= Player.highestStreak))
                 {
                     Player.highestStreak = 5;
                     rewardManager.paintNewReward(g, width, height);
                 }
-                if(Player.streak == 10)
+                if((Player.streak == 10) && (Player.streak >= Player.highestStreak))
                 {
                     Player.highestStreak = 10;
                     rewardManager.paintNewReward(g, width, height);
                 }
-                if(Player.streak == 15)
+                if((Player.streak == 15) && (Player.streak >= Player.highestStreak))
                 {
                     Player.highestStreak = 15;
                     rewardManager.paintNewReward(g, width, height);
@@ -447,6 +449,8 @@ public class GamePanel extends JPanel implements Runnable
                         g.drawString(String.valueOf(answer), width / 2 + 80, 100);
                         g.drawString("Odpowiedz niepoprawna!", width / 2 - 80, 140);
                     }
+                    g.setColor(Color.black);
+                    g.drawString("menu", 40, height - 40);
                 }
                 try {
                     checkPlayerOutside();
