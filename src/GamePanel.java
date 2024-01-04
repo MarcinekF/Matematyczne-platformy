@@ -31,7 +31,7 @@ public class GamePanel extends JPanel implements Runnable
     Random random = new Random();
     String[] QandA = new String[6];
     ArrayList<Platform> platformArrayList = new ArrayList<>();
-    Player player = new Player(width/2, height - 164);
+    Player player = new Player(width/2 + 15, height - 164);
     Menu menu = new Menu(width, height);
     KeyHandler keyH = new KeyHandler();
     MouseHandler mouseH = new MouseHandler();
@@ -256,7 +256,7 @@ public class GamePanel extends JPanel implements Runnable
                     switch (menu.pickedAction)
                     {
                         case 0:
-                            player = new Player(width/2, height - 164);
+                            player = new Player(width/2 + 15, height - 164);
                             answer = generateQuiz();
                             question = QandA[0] + " " + QandA[2] + " " + QandA[1] + " = ";
                             platformArrayList.clear();
@@ -308,7 +308,7 @@ public class GamePanel extends JPanel implements Runnable
                         }
                         break;
                     }
-                    player = new Player(width/2, height - 164);
+                    player = new Player(width/2 + 15, height - 164);
                     menu.loadGame();
                     platformArrayList.clear();
                     platformArrayList.add(new Platform(width/2, height - 100,"none"));
@@ -399,7 +399,7 @@ public class GamePanel extends JPanel implements Runnable
                         g.drawString(p.answer, p.rect.x + 20, p.rect.y + 40);
                     }
                 }
-                g.drawImage(player.sprite, player.rect.x, player.rect.y, 64, 64, null);
+                g.drawImage(player.sprite, player.rect.x - 15, player.rect.y, 64, 64, null);
 
                 if((Player.streak == 5) && (Player.streak >= Player.highestStreak))
                 {
@@ -464,7 +464,7 @@ public class GamePanel extends JPanel implements Runnable
     public void checkPlayerOutside() throws IOException {
         if (player.rect.y > height )
         {
-            player.rect.x = width/2;
+            player.rect.x = width/2 + 15;
             player.rect.y = height - 164;
             Player.lives --;
             player.updateSheet("assets/ScarfKitten/hit.png");
@@ -483,6 +483,10 @@ public class GamePanel extends JPanel implements Runnable
                 player.landed();
                 if (p.answer.equals(String.valueOf(answer)))
                 {
+                    if(player.rect.y + 64 > p.rect.y)
+                    {
+                        player.rect.x -= (player.rect.x - p.rect.x)/3;
+                    }
                     timeLeft = 30;
                     timeLeftDelay = System.nanoTime();
                     currentTime = System.nanoTime();
@@ -521,11 +525,11 @@ public class GamePanel extends JPanel implements Runnable
                     player.updateSheet("assets/ScarfKitten/hit.png");
                     break;
                 }
-                else
+                else if (!correctAnswer)
                 {
-                    if((p.rect.x!= width/2) || (incorrectAnswer))
+                    if(p.rect.x!= width/2)
                     {
-                        platformMoved = true;
+                        platformMoved = true; //błąd
                     }
                     else
                     {
@@ -674,7 +678,7 @@ public class GamePanel extends JPanel implements Runnable
         if (player.rect.x < width/2)
         {
             p.rect.x -= velocity;
-            if(p.rect.x < player.rect.x)
+            if((p.rect.x < player.rect.x - 15) || (gravity == 0))
             {
                 incorrectAnswer = false;
             }
@@ -682,7 +686,7 @@ public class GamePanel extends JPanel implements Runnable
         else if(player.rect.x > width/2)
         {
             p.rect.x += velocity;
-            if(p.rect.x >= player.rect.x)
+            if((p.rect.x >= player.rect.x - 15) || (gravity == 0))
             {
                 incorrectAnswer = false;
             }
