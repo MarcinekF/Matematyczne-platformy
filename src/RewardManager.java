@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+/**
+ * Klasa zarządzająca nagrodami w grze, takimi jak puchary za osiągnięcia gracza.
+ */
 public class RewardManager {
     File sheetFile;
     BufferedImage sheet;
@@ -18,6 +20,10 @@ public class RewardManager {
     Font customFont = new Font("Arial", Font.PLAIN, 18);
     Font warningFont = new Font("Arial", Font.PLAIN, 16);
 
+    /**
+     * Konstruktor klasy RewardManager.
+     * Inicjuje plik arkusza nagród oraz wczytuje obrazy nagród.
+     */
     public RewardManager() throws IOException
     {
         this.sheetFile = new File("assets/Rewards.png");
@@ -29,12 +35,18 @@ public class RewardManager {
         streak = 0;
     }
 
+    /**
+     * Metoda rysująca nową nagrodę na ekranie.
+     */
     public void paintNewReward(Graphics g, int screenWidth, int screenHeight)
     {
         g.drawImage(sprite,screenWidth / 2 + 170,screenHeight - 200,null);
         g.drawString(Player.streak + " odpowiedzi pod rząd!",screenWidth/2 + 90, screenHeight - 120);
     }
 
+    /**
+     * Metoda aktualizująca obecnie wyświetlaną klatkę animacji nagrody.
+     */
     public void updateSprite()
     {
         index ++;
@@ -54,6 +66,9 @@ public class RewardManager {
         sprite = sheet.getSubimage(index*64,y,64,52);
     }
 
+    /**
+     * Metoda wyświetlająca ekran z przeglądem pucharów (nagród) dla gracza.
+     */
     public void showRewards(Graphics g, int screenWidth, int screenHeight)
     {
         g.drawString("Przegląd pucharów", screenWidth/2 - 80, 100);

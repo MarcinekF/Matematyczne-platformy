@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Klasa reprezentująca platformę w grze.
+ */
 public class Platform
 {
     File sheetFile = new File("assets/fake_platform.png");
@@ -14,12 +17,19 @@ public class Platform
     Rectangle rect;
     String answer;
     boolean Animated = false;
+
+    /**
+     * Konstruktor klasy Platform.
+     */
     public Platform(int x, int y, String answer) throws IOException
     {
         rect = new Rectangle(x, y, 57, 10);
         this.answer = answer;
     }
 
+    /**
+     * Metoda aktualizująca obecnie wyświetlaną klatkę animacji platformy.
+     */
     public boolean updateSprite()
     {
         animationIndex++;

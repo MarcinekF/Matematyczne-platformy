@@ -1,8 +1,14 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * Klasa obsługująca zdarzenia myszy.
+ */
 public class MouseHandler implements MouseListener
 {
+    /**
+     * Metoda obsługująca zdarzenie kliknięcia myszą.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getPoint().x;

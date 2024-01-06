@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.io.IOException;
-
+/**
+ * Główna klasa programu, która zawiera metodę main.
+ */
 public class Main
 {
     public static void main(String[] args) throws IOException

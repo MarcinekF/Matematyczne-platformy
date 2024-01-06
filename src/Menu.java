@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Klasa zarządzająca menu w grze.
+ */
 public class Menu
 {
     Font customFont = new Font("Arial", Font.PLAIN, 16);
@@ -22,6 +25,9 @@ public class Menu
     int screenWidth;
     int screenHeight;
 
+    /**
+     * Konstruktor klasy Menu.
+     */
     public Menu(int screenWidth, int screenHeight)
     {
         this.screenWidth = screenWidth;
@@ -45,6 +51,9 @@ public class Menu
         saveMenuOptions.put("Anuluj", 1);
     }
 
+    /**
+     * Metoda do wyświetlania menu w przypadku zatrzymania gry.
+     */
     public void gamePaused(Graphics g)
     {
         g.drawString("Gra zatrzymana", screenWidth/2 - 100, screenHeight / 4);
@@ -64,6 +73,10 @@ public class Menu
             i++;
         }
     }
+
+    /**
+     * Metoda do wyświetlania głównego menu gry.
+     */
     public void mainMenu(Graphics g)
     {
         g.drawString("Matematyczne platformy", screenWidth / 2 - 140, screenHeight / 4);
@@ -83,6 +96,10 @@ public class Menu
             i++;
         }
     }
+
+    /**
+     * Metoda do wyświetlania menu wczytywania gry z zapisu.
+     */
     public void loadGame(Graphics g)
     {
         g.drawString("Wybierz plik do wczytania", screenWidth / 2 - 110, screenHeight / 4);
@@ -121,6 +138,10 @@ public class Menu
             g.drawString("Powrot", screenWidth/2 - 30,screenHeight/2 + i * 30 + 10);
         }
     }
+
+    /**
+     * Metoda do tworzenia okna dla nowego zapisu gry.
+     */
     public void createSave(Graphics g)
     {
         g.drawString("Zapisywanie gry", screenWidth/2 - 80, screenHeight / 4);
@@ -144,6 +165,10 @@ public class Menu
             i++;
         }
     }
+
+    /**
+     * Metoda do wczytywania danych gry z pliku.
+     * */
     public void loadGame() throws IOException {
 
         String save = "saves/" + savesList[pickedAction].getName();
@@ -155,6 +180,10 @@ public class Menu
         }
         pickedAction = 0;
     }
+
+    /**
+     * Metoda do zapisywania danych gry do pliku.
+     */
     public void saveGame(String filePath)
     {
         String var1 = String.valueOf(Player.lives);

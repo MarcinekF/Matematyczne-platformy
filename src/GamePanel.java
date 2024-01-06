@@ -7,9 +7,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-
+/**
+ * Klasa reprezentująca panel gry w aplikacji.
+ * Odpowiada za inicjalizację gry, obsługę stanów gry, renderowanie ekranu
+ * oraz zarządzanie logiką gry, taką jak ruch postaci, platformy, pytania i odpowiedzi.
+ */
 public class GamePanel extends JPanel implements Runnable
 {
+    /**
+     * Klasa enum służąca do określenia aktualnego stanu gry
+     */
     public enum GameState
     {
         running,
@@ -41,6 +48,8 @@ public class GamePanel extends JPanel implements Runnable
     Font customFont = new Font("Arial", Font.PLAIN, 24);
     String question;
     int answer;
+
+    int totalTime = 30;
     public static int timeLeft = 30;
     long timeLeftDelay = System.nanoTime();
     long currentTime = System.nanoTime();
@@ -59,13 +68,18 @@ public class GamePanel extends JPanel implements Runnable
         this.setFocusable(true);
 
     }
-
+    /**
+     * Metoda uruchamiająca wątek gry. Inicjuje logikę gry i renderowanie.
+     */
     public void startGameThread()
     {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
+    /**
+     * Główna pętla gry. Aktualizuje stan gry, rysuje elementy na ekranie
+     * i obsługuje różne stany gry, takie jak pauza, menu czy pokazywanie nagród.
+     */
     @Override
     public void run()
     { //Game loop
@@ -151,6 +165,11 @@ public class GamePanel extends JPanel implements Runnable
             }
         }
     }
+
+    /**
+     * Metoda aktualizująca logikę gry, wywoływana w pętli gry.
+     * Zarządza różnymi stanami gry i obsługuje interakcje gracza.
+     */
     public void update() throws IOException
     {
         switch (gameState)
@@ -262,7 +281,7 @@ public class GamePanel extends JPanel implements Runnable
                             platformArrayList.clear();
                             platformArrayList.add(new Platform(width/2, height - 100,"none"));
                             generatePlatforms();
-                            timeLeft = 30;
+                            timeLeft = totalTime;
                             timeLeftDelay = System.nanoTime();
                             currentTime = System.nanoTime();
                             timeLeftDelay = System.nanoTime();
@@ -316,7 +335,7 @@ public class GamePanel extends JPanel implements Runnable
                     question = QandA[0] + " " + QandA[2] + " " + QandA[1] + " = ";
                     generatePlatforms();
                     gameState = GameState.running;
-                    timeLeft = 30;
+                    timeLeft = totalTime;
                     timeLeftDelay = System.nanoTime();
                     currentTime = System.nanoTime();
                     keyH.enterPressed = false;
@@ -363,6 +382,10 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
+    /**
+     * Metoda rysująca elementy gry na ekranie.
+     * Renderuje tło, platformy, gracza, pytania i odpowiedzi.
+     */
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -461,6 +484,12 @@ public class GamePanel extends JPanel implements Runnable
         }
 
     }
+
+    /**
+     * Metoda sprawdzająca, czy postać gracza znajduje się poza obszarem gry.
+     * W przypadku utraty życia przenosi gracza na początkową pozycję.
+     */
+
     public void checkPlayerOutside() throws IOException {
         if (player.rect.y > height )
         {
@@ -474,6 +503,16 @@ public class GamePanel extends JPanel implements Runnable
             player.hit = true;
         }
     }
+
+    /**
+     * Metoda sprawdzająca kolizje pomiędzy graczem a platformami gry.
+     * Aktualizuje stan gry na podstawie kolizji, takich jak poprawna lub błędna odpowiedź,
+     * utrata życia, czy ruch platformy. Zarządza również animacją i interakcjami z graczem.
+     *
+     * @param player     Obiekt reprezentujący gracza w grze.
+     * @param platforms  Lista platform w grze, z którymi sprawdzane są kolizje.
+     * @throws IOException Jeśli wystąpi błąd wejścia/wyjścia podczas aktualizacji logiki gry.
+     */
     public void checkCollisions(Player player, ArrayList<Platform> platforms) throws IOException {
         for (Platform p : platforms)
         {
@@ -539,9 +578,13 @@ public class GamePanel extends JPanel implements Runnable
             }
         }
     }
-    public int generateQuiz()   // generates values in QandA array
-    // [0] - number1, [1] - number2, [2] - operator, [3] ... [5] - answers
-    //returns correct answer
+
+    /**
+     * Generuje wartości w tablicy QandA
+     * [0] - number1, [1] - number2, [2] - operator, [3] ... [5] - odpowiedzi
+     * zwrata poprawną odpowiedź na pytanie
+     */
+    public int generateQuiz()
     {
         String[] chars = {"+", "-", "*", "/"};
         int answer = 0;
@@ -595,6 +638,12 @@ public class GamePanel extends JPanel implements Runnable
         return answer;
     }
 
+    /**
+     * Metoda generująca platformy w grze na podstawie danych zawartych w tablicy QandA.
+     * Tworzy platformy w liczbie odpowiadającej ilości odpowiedzi do pytania matematycznego.
+     *
+     * @throws IOException Jeśli wystąpi błąd wejścia/wyjścia podczas generowania platform.
+     */
     public void generatePlatforms() throws IOException
     {
         int counter = 1;
@@ -607,6 +656,9 @@ public class GamePanel extends JPanel implements Runnable
 
     }
 
+    /**
+     * Metoda obsługująca ruch platformy na której znajduje się gracz w wypadku poprawnej odpowiedzi w osi Y
+     */
     private void movePlatformInY()
     {
         for (Platform p : platformArrayList)
@@ -623,6 +675,10 @@ public class GamePanel extends JPanel implements Runnable
             }
         }
     }
+
+    /**
+     * Metoda obsługująca ruch platformy na której jest gracz w osi X aby ta wróciła do punktu wyjścia
+     */
     private void platformGoBack() throws IOException {
         for (Platform p : platformArrayList)
         {
@@ -672,6 +728,9 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
+    /**
+     * Metoda obsługująca ruch platformyu w osi X aby wysłać platformę po gracza w wypadku błędnej odpowiedzi
+     */
     private void movePlatformInX()
     {
         Platform p = platformArrayList.get(0);
@@ -697,6 +756,10 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
+    /**
+     * Metoda generująca listę współrzędnych tła gry.
+     * Ułatwia renderowanie tła w grze.
+     */
     private List<List<Integer>> getBackgroundCords(Image background, int screenWidth, int screenHeight)
     {
         List<List<Integer>> backgroundCords = new ArrayList<>();

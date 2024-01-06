@@ -5,6 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Klasa reprezentująca gracza w grze.
+ */
 public class Player
 {
     File sheetFile;
@@ -24,6 +27,9 @@ public class Player
     int hitDelay;
     String answer;
 
+    /**
+     * Konstruktor klasy Player.
+    */
     public Player(int x, int y) throws IOException {
         this.rect = new Rectangle(x, y, 32, 64);
         this.sheetFile = new File("assets/ScarfKitten/idle.png");
@@ -41,6 +47,9 @@ public class Player
         streak = 0;
     }
 
+    /**
+     * Metoda aktualizująca obecnie wyświetlaną klatkę animacji gracza.
+     */
     public void updateSprite()
     {
         animationIndex++;
@@ -51,6 +60,9 @@ public class Player
         sprite = sheet.getSubimage(animationIndex*32,0,32,32);
     }
 
+    /**
+     * Metoda aktualizująca arkusz animacji gracza na podstawie ścieżki do pliku.
+    */
     public void updateSheet(String path) throws IOException {
         animationIndex = 0;
         sheetFile = new File(path);
@@ -59,15 +71,27 @@ public class Player
         sheetWidth = sheet.getWidth() / 32;
     }
 
-
+    /**
+     * Metoda wywoływana po lądowaniu gracza.
+     */
     public void landed() throws IOException {
         rect.y = rect.y - 5;
         updateSheet("assets/ScarfKitten/idle.png");
     }
+
+    /**
+     * Metoda wywoływana podczas spadania gracza.
+     */
     public void fall() throws IOException
     {
         updateSheet("assets/ScarfKitten/fall.png");
     }
+
+    /**
+     * Metoda wywoływana podczas skoku gracza.
+     *
+     * @throws IOException Występuje w przypadku problemów z wczytaniem obrazów.
+     */
     public void jump () throws IOException
     {
         if(jumpLimit == 1)
@@ -76,6 +100,10 @@ public class Player
             jumpLimit --;
         }
     }
+
+    /**
+     * Metoda zliczająca czas pokazywania animacji utraty życia
+     */
     public void countHitTime() throws IOException {
         hitDelay++;
         if(hitDelay <= 8)

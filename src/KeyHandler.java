@@ -2,17 +2,34 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class KeyHandler implements KeyListener {
+/**
+ * Klasa obsługująca zdarzenia wykonane na klawiaturze.
+ * Implementuje interfejs KeyListener, umożliwiając reakcję na wciśnięcia i zwolnienia klawiszy.
+ */
+public class KeyHandler implements KeyListener
+{
 
     public boolean rightPressed, leftPressed, spacePressed, downPressed, upPressed, enterPressed;
 
     public boolean saveNameFlag;
     public static StringBuilder saveName;
+    /**
+     * Konstruktor klasy KeyHandler.
+     * Inicjuje flagi i obiekt StringBuilder do przechowywania nazwy zapisu.
+     */
     public KeyHandler()
     {
         this.saveNameFlag = false;
         saveName = new StringBuilder();
     }
+
+    /**
+     * Obsługuje zdarzenie wciśnięcia klawisza na klawiaturze.
+     * Reaguje na różne klawisze w zależności od aktualnego stanu gry.
+     * Jeśli trwa wprowadzanie nazwy zapisu, dodaje znaki do StringBuildera.
+     *
+     * @param e Zdarzenie związane z wciśnięciem klawisza.
+     */
     @Override
     public void keyTyped(KeyEvent e)
     {
@@ -27,7 +44,13 @@ public class KeyHandler implements KeyListener {
             saveName.append(e.getKeyChar());
         }
     }
-
+    /**
+     * Obsługuje zdarzenie przytrzymania klawisza na klawiaturze.
+     * Reaguje na różne klawisze w zależności od aktualnego stanu gry.
+     * Kontroluje również ruchy postaci i interakcje w grze.
+     *
+     * @param e Zdarzenie związane z przytrzymaniem klawisza.
+     */
     @Override
     public void keyPressed(KeyEvent e)
     {
@@ -72,6 +95,11 @@ public class KeyHandler implements KeyListener {
         }
     }
 
+    /**
+     * Obsługuje zdarzenie zwolnienia klawisza na klawiaturze.
+     * Reaguje na różne klawisze w zależności od aktualnego stanu gry.
+     * Kontroluje również ruchy postaci w grze.
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
