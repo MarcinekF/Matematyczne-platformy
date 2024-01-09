@@ -1,10 +1,16 @@
 import javax.swing.*;
 import java.io.IOException;
 /**
- * Główna klasa programu, która zawiera metodę main.
+ * Główna klasa programu, zawiera metodę main, która jest punktem wejścia do programu.
+ * Inicjalizuje i uruchamia główny obiekt gry oraz obsługuje ewentualne wyjątki.
  */
 public class Main
 {
+    /**
+     * Metoda main - punkt wejścia do programu.
+     * @param args Argumenty wiersza poleceń przekazywane do programu.
+     * @throws IOException Obsługa wyjątku IOException, np. brak dostępu do plików z obrazami
+     */
     public static void main(String[] args) throws IOException
     {
         JFrame window = new JFrame();

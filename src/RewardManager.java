@@ -16,13 +16,15 @@ public class RewardManager {
     BufferedImage spriteTrophyNo15;
 
     int index = 0;
-    public static int streak;
+
     Font customFont = new Font("Arial", Font.PLAIN, 18);
     Font warningFont = new Font("Arial", Font.PLAIN, 16);
 
     /**
      * Konstruktor klasy RewardManager.
      * Inicjuje plik arkusza nagród oraz wczytuje obrazy nagród.
+     *
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public RewardManager() throws IOException
     {
@@ -32,7 +34,6 @@ public class RewardManager {
         this.spriteTrophyNo5 = sheet.getSubimage(448,104,64,52);
         this.spriteTrophyNo10 = sheet.getSubimage(448,52,64,52);
         this.spriteTrophyNo15 = sheet.getSubimage(448,0,64,52);
-        streak = 0;
     }
 
     /**

@@ -7,7 +7,9 @@ import java.awt.event.MouseListener;
 public class MouseHandler implements MouseListener
 {
     /**
-     * Metoda obsługująca zdarzenie kliknięcia myszą.
+     * Obsługuje kliknięcie myszy.
+     *
+     * @param e Zdarzenie myszy.
      */
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -20,21 +22,41 @@ public class MouseHandler implements MouseListener
         }
     }
 
+    /**
+     * Obsługuje naciśnięcie przycisku myszy.
+     *
+     * @param e Zdarzenie myszy.
+     */
     @Override
     public void mousePressed(MouseEvent e) {
 
     }
 
+    /**
+     * Obsługuje zwolnienie przycisku myszy.
+     *
+     * @param e Zdarzenie myszy.
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
+    /**
+     * Obsługuje wejście myszy na obszar komponentu.
+     *
+     * @param e Zdarzenie myszy.
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
+    /**
+     * Obsługuje wyjście myszy z obszaru komponentu.
+     *
+     * @param e Zdarzenie myszy.
+     */
     @Override
     public void mouseExited(MouseEvent e) {
 

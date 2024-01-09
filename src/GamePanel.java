@@ -19,21 +19,61 @@ public class GamePanel extends JPanel implements Runnable
      */
     public enum GameState
     {
+        /**
+         * Gra uruchomiona
+         */
         running,
+        /**
+         * Gra zatrzymana
+         */
         paused,
+        /**
+         * Główne menu
+         */
         menu,
+        /**
+         * Ekran wczytywania rozgrywki
+         */
         loadingSaves,
+        /**
+         * Ekran tworzenia rozgrywki
+         */
         creatingSave,
+        /**
+         * Ekran ukazujący zdobyte osiągnięcia
+         */
         showRewards
     }
 
+    /**
+     * Obraz tła
+     */
     Image background = ImageIO.read(new File("assets/Background/Purple.png"));
+
+    /**
+     * Szerokość okna gry
+     */
     int width = 800;
+
+    /**
+     * Wysokość okna gry
+     */
     int height = 600;
     List<List<Integer>> backgroundCords = getBackgroundCords(background, width, height);
+
+    /**
+     * Deklaracja klasy typu Enum aby ułatwić rozpoznanie aktualnego stanu gry.
+     */
     public static GameState gameState = GameState.menu;
+
     int FPS = 60;
+
+
     int velocity = 4;
+
+    /**
+     * Zmienna odpowiedzialna za działanie grawitacji na gracza. Gdy jest równa 0, gracz nie spada. Gdy jest równa 1 gracz spada w dół.
+     */
     public int gravity = 0;
     Random random = new Random();
     String[] QandA = new String[6];
@@ -49,7 +89,13 @@ public class GamePanel extends JPanel implements Runnable
     String question;
     int answer;
 
-    int totalTime = 30;
+    /**
+     * Zmienna służąca do utrudniania gry wraz z lepszymi wynikami gracza
+     */
+    public static int totalTime = 30;
+    /**
+     * Zmienna przechowująca informacje o czasie jaki gracz ma na odpowiedź
+     */
     public static int timeLeft = 30;
     long timeLeftDelay = System.nanoTime();
     long currentTime = System.nanoTime();
@@ -58,6 +104,10 @@ public class GamePanel extends JPanel implements Runnable
     boolean incorrectAnswer = false;
     boolean platformMoved = false;
 
+    /**
+     * Konstruktor klasy GamePanel.
+     * @throws IOException Wyjątek, który może być rzucony w przypadku problemów z wczytaniem plików.
+     */
     public GamePanel() throws IOException
     {
         this.setPreferredSize(new Dimension(width, height)); //ScreenSize
@@ -169,6 +219,8 @@ public class GamePanel extends JPanel implements Runnable
     /**
      * Metoda aktualizująca logikę gry, wywoływana w pętli gry.
      * Zarządza różnymi stanami gry i obsługuje interakcje gracza.
+     * @throws IOException Wyjątek, który może być rzucony w przypadku problemów z
+     * operacjami wejścia/wyjścia podczas aktualizacji gry, np. błąd wczytania obrazu
      */
     public void update() throws IOException
     {
@@ -426,16 +478,19 @@ public class GamePanel extends JPanel implements Runnable
 
                 if((Player.streak == 5) && (Player.streak >= Player.highestStreak))
                 {
+                    totalTime = 25;
                     Player.highestStreak = 5;
                     rewardManager.paintNewReward(g, width, height);
                 }
                 if((Player.streak == 10) && (Player.streak >= Player.highestStreak))
                 {
+                    totalTime = 20;
                     Player.highestStreak = 10;
                     rewardManager.paintNewReward(g, width, height);
                 }
                 if((Player.streak == 15) && (Player.streak >= Player.highestStreak))
                 {
+                    totalTime = 15;
                     Player.highestStreak = 15;
                     rewardManager.paintNewReward(g, width, height);
                 }
@@ -486,8 +541,11 @@ public class GamePanel extends JPanel implements Runnable
     }
 
     /**
-     * Metoda sprawdzająca, czy postać gracza znajduje się poza obszarem gry.
-     * W przypadku utraty życia przenosi gracza na początkową pozycję.
+     * Sprawdza, czy pozycja gracza wykracza poza granice planszy gry.
+     * Jeśli tak, dostosowuje pozycję gracza i podejmuje odpowiednie akcje,
+     * takie jak utrata życia czy zakończenie gry.
+     *
+     * @throws IOException Jeśli wystąpi problem z operacją wejścia/wyjścia podczas dostosowywania pozycji gracza.
      */
 
     public void checkPlayerOutside() throws IOException {
@@ -526,7 +584,7 @@ public class GamePanel extends JPanel implements Runnable
                     {
                         player.rect.x -= (player.rect.x - p.rect.x)/3;
                     }
-                    timeLeft = 30;
+                    timeLeft = totalTime;
                     timeLeftDelay = System.nanoTime();
                     currentTime = System.nanoTime();
                     timeLeftDelay = System.nanoTime();
@@ -541,7 +599,7 @@ public class GamePanel extends JPanel implements Runnable
                 }
                 else if (!p.answer.equals("none"))
                 {
-                    timeLeft = 30;
+                    timeLeft = totalTime;
                     timeLeftDelay = System.nanoTime();
                     currentTime = System.nanoTime();
                     timeLeftDelay = System.nanoTime();
@@ -582,7 +640,7 @@ public class GamePanel extends JPanel implements Runnable
     /**
      * Generuje wartości w tablicy QandA
      * [0] - number1, [1] - number2, [2] - operator, [3] ... [5] - odpowiedzi
-     * zwrata poprawną odpowiedź na pytanie
+     * @return Zwraca poprawną odpowiedź na pytanie
      */
     public int generateQuiz()
     {

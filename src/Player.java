@@ -17,11 +17,23 @@ public class Player
     int jumpLimit;
     int animationIndex;
     Rectangle rect;
-    Shape shape;
-    public static int rewards;
+
+    /**
+     * Ilość żyć gracza
+     */
     public static int lives;
+
+    /**
+     * Ilość punktów zdobytych przez gracza
+     */
     public static int points;
+    /**
+     * Nieprzerwana seria poprawnych odpowiedzi pod rząd
+     */
     public static int streak;
+    /**
+     * Największa nieprzerwana seria poprawnych odpowiedzi pod rząd
+     */
     public static int highestStreak;
     boolean hit;
     int hitDelay;
@@ -29,7 +41,11 @@ public class Player
 
     /**
      * Konstruktor klasy Player.
-    */
+     *
+     * @param x Początkowa pozycja X postaci.
+     * @param y Początkowa pozycja Y postaci.
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
+     */
     public Player(int x, int y) throws IOException {
         this.rect = new Rectangle(x, y, 32, 64);
         this.sheetFile = new File("assets/ScarfKitten/idle.png");
@@ -41,7 +57,6 @@ public class Player
         this.hit = false;
         highestStreak = 0;
         lives = 3;
-        rewards = 0;
         answer ="none";
         points = 0;
         streak = 0;
@@ -61,8 +76,11 @@ public class Player
     }
 
     /**
-     * Metoda aktualizująca arkusz animacji gracza na podstawie ścieżki do pliku.
-    */
+     * Aktualizuje arkusz sprite'ów postaci na podstawie ścieżki do pliku.
+     *
+     * @param path Ścieżka do pliku z nowym arkuszem sprite'ów postaci.
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
+     */
     public void updateSheet(String path) throws IOException {
         animationIndex = 0;
         sheetFile = new File(path);
@@ -72,7 +90,9 @@ public class Player
     }
 
     /**
-     * Metoda wywoływana po lądowaniu gracza.
+     * Obsługuje moment lądowania postaci.
+     *
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public void landed() throws IOException {
         rect.y = rect.y - 5;
@@ -80,7 +100,9 @@ public class Player
     }
 
     /**
-     * Metoda wywoływana podczas spadania gracza.
+     * Obsługuje moment spadania postaci.
+     *
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public void fall() throws IOException
     {
@@ -88,9 +110,9 @@ public class Player
     }
 
     /**
-     * Metoda wywoływana podczas skoku gracza.
+     * Obsługuje moment skoku postaci.
      *
-     * @throws IOException Występuje w przypadku problemów z wczytaniem obrazów.
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public void jump () throws IOException
     {
@@ -103,6 +125,8 @@ public class Player
 
     /**
      * Metoda zliczająca czas pokazywania animacji utraty życia
+     *
+     *  @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public void countHitTime() throws IOException {
         hitDelay++;

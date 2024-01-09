@@ -8,11 +8,46 @@ import java.io.IOException;
  */
 public class KeyHandler implements KeyListener
 {
+    /**
+     * Flaga wciśnięcia prawej strzałki
+     */
+    public boolean rightPressed;
 
-    public boolean rightPressed, leftPressed, spacePressed, downPressed, upPressed, enterPressed;
+    /**
+     * Flaga wciśnięcia lewej strzałki
+     */
+    public boolean leftPressed;
 
+    /**
+     * Flaga wciśnięcia spacji
+     */
+    public boolean spacePressed;
+
+    /**
+     * Flaga wciśnięcia dolnej strzałki
+     */
+    public boolean downPressed;
+
+    /**
+     * Flaga wciśnięcia górnej strzałki
+     */
+    public boolean upPressed;
+
+    /**
+     * Flaga wciśnięcia enter
+     */
+    public boolean enterPressed;
+
+    /**
+     * Flaga tworzenia nazwy dla zapisu gry
+     */
     public boolean saveNameFlag;
+
+    /**
+     * Zmienna przechowująca nazwę dla zapisu gry
+     */
     public static StringBuilder saveName;
+
     /**
      * Konstruktor klasy KeyHandler.
      * Inicjuje flagi i obiekt StringBuilder do przechowywania nazwy zapisu.

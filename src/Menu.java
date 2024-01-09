@@ -16,6 +16,10 @@ public class Menu
     Font pickedActionFont = new Font("Arial", Font.PLAIN, 18);
     int pickedAction;
     File savesFolder;
+
+    /**
+     * Tablica plików zapisów gry w folderze.
+     */
     public static File [] savesList;
 
     LinkedHashMap<String, Integer> gamePausedOptions = new LinkedHashMap<>();
@@ -98,7 +102,10 @@ public class Menu
     }
 
     /**
-     * Metoda do wyświetlania menu wczytywania gry z zapisu.
+     * Wczytuje dane gry z pliku o określonej ścieżce.
+     *
+     * @param g Ścieżka do pliku z zapisanymi danymi gry.
+     * @throws IOException Jeśli wystąpi problem z operacją wejścia/wyjścia podczas wczytywania gry.
      */
     public void loadGame(Graphics g)
     {
@@ -177,6 +184,18 @@ public class Menu
             Player.points = Integer.parseInt(br.readLine().trim());
             Player.streak = Integer.parseInt(br.readLine().trim());
             Player.highestStreak = Integer.parseInt(br.readLine().trim());
+            if (Player.highestStreak >=5)
+            {
+                GamePanel.totalTime = 25;
+            }
+            if (Player.highestStreak >=10)
+            {
+                GamePanel.totalTime = 20;
+            }
+            if (Player.highestStreak >=15)
+            {
+                GamePanel.totalTime = 15;
+            }
         }
         pickedAction = 0;
     }
