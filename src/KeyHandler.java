@@ -134,6 +134,8 @@ public class KeyHandler implements KeyListener
      * Obsługuje zdarzenie zwolnienia klawisza na klawiaturze.
      * Reaguje na różne klawisze w zależności od aktualnego stanu gry.
      * Kontroluje również ruchy postaci w grze.
+     *
+     * @param e Zdarzenie związane z odciśnięciem klawisza.
      */
     @Override
     public void keyReleased(KeyEvent e) {

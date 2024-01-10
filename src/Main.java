@@ -7,6 +7,13 @@ import java.io.IOException;
 public class Main
 {
     /**
+     * Konstruktor klasy Main
+     */
+    public Main()
+    {
+
+    }
+    /**
      * Metoda main - punkt wejścia do programu.
      * @param args Argumenty wiersza poleceń przekazywane do programu.
      * @throws IOException Obsługa wyjątku IOException, np. brak dostępu do plików z obrazami

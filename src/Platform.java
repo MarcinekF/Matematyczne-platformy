@@ -20,6 +20,12 @@ public class Platform
 
     /**
      * Konstruktor klasy Platform.
+     *
+     * @param x Położenie x platformy
+     * @param y Położenie y platformy
+     * @param answer Odpowiedź jaka widnieje przy platformie
+     *
+     * @throws IOException Wyjątek rzucany w przypadku błędu wczytywania plików graficznych.
      */
     public Platform(int x, int y, String answer) throws IOException
     {
@@ -29,6 +35,8 @@ public class Platform
 
     /**
      * Metoda aktualizująca obecnie wyświetlaną klatkę animacji platformy.
+     *
+     * @return Jeśli zwraca True to platforma znika z gry. Gdy False, przesunięty zostanie tylko indeks animacji
      */
     public boolean updateSprite()
     {

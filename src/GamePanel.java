@@ -59,6 +59,9 @@ public class GamePanel extends JPanel implements Runnable
      * Wysokość okna gry
      */
     int height = 600;
+    /**
+     * Lista zawierająca listy współrzędnych obrazów które są rysowane w tle
+     */
     List<List<Integer>> backgroundCords = getBackgroundCords(background, width, height);
 
     /**
@@ -66,27 +69,84 @@ public class GamePanel extends JPanel implements Runnable
      */
     public static GameState gameState = GameState.menu;
 
+    /**
+     * Częstotliwość odświeżania ekranu (frames per second)
+     */
     int FPS = 60;
 
-
+    /**
+     * Prędkość z jaką porusza się gracz
+     */
     int velocity = 4;
 
     /**
      * Zmienna odpowiedzialna za działanie grawitacji na gracza. Gdy jest równa 0, gracz nie spada. Gdy jest równa 1 gracz spada w dół.
      */
     public int gravity = 0;
+
+    /**
+     * Obiekt Random odpowiedzialny za generowanie liczb pseudo losowych
+     */
     Random random = new Random();
+
+    /**
+     * Tablica zawierająca informacje na temat pytań zadawanych graczowi oraz odpowiedzi na platformach
+     * [0] - number1, [1] - number2, [2] - operator, [3] ... [5] - odpowiedzi
+     */
     String[] QandA = new String[6];
+
+    /**
+     * Lista platform które są w grze
+     */
     ArrayList<Platform> platformArrayList = new ArrayList<>();
+
+    /**
+     * Klasa Player implementująca postać gracza
+     */
     Player player = new Player(width/2 + 15, height - 164);
+
+    /**
+     * Obiekt klasy Menu odpowiedzialna za menu gry
+     */
     Menu menu = new Menu(width, height);
+
+    /**
+     * Obiekt KeyHandler odpowiedzialny za obsługę zdarzeń na klawiaturze
+     */
     KeyHandler keyH = new KeyHandler();
+
+    /**
+     * Obiekt MouseHandler odpowiedzialny za obsługę zdarzeń myszy
+     */
     MouseHandler mouseH = new MouseHandler();
+
+    /**
+     * Obiekt RewardManager odpowiedzialny za mechanikę nagród w grze
+     */
     RewardManager rewardManager = new RewardManager();
+    /**
+     * Zmienna przechowująca aktualny czas rzeczywisty
+     */
     long lastTime = System.nanoTime();
+
+    /**
+     * Zmienna przechowująca aktualny czas rzeczywisty dla opóźnienia animacji gracza
+     */
     long playerAnimationTime = System.nanoTime();
+
+    /**
+     * Czcionka dla menu
+     */
     Font customFont = new Font("Arial", Font.PLAIN, 24);
+
+    /**
+     * Pytanie wyświetlanie na ekranie
+     */
     String question;
+
+    /**
+     * Poprawna odpowiedź do aktualnego pytania
+     */
     int answer;
 
     /**
@@ -97,15 +157,39 @@ public class GamePanel extends JPanel implements Runnable
      * Zmienna przechowująca informacje o czasie jaki gracz ma na odpowiedź
      */
     public static int timeLeft = 30;
+
+    /**
+     * Zmienna przechowująca aktualny czas rzeczywisty do odliczania pojedyńczych sekund
+     */
     long timeLeftDelay = System.nanoTime();
+
+    /**
+     * Zmienna przechowująca aktualny czas rzeczywisty
+     */
     long currentTime = System.nanoTime();
+
+    /**
+     * Zmienna wątku dla programu
+     */
     Thread gameThread;
+
+    /**
+     * Flaga udzielonej poprawnej odpowiedzi przez gracza
+     */
     boolean correctAnswer = false;
+    /**
+     * Flaga udzielonej niepoprawnej odpowiedzi przez gracza
+     */
     boolean incorrectAnswer = false;
+
+    /**
+     * Flaga poruszenia się podstawowej platformy bez odpowiedzi
+     */
     boolean platformMoved = false;
 
     /**
      * Konstruktor klasy GamePanel.
+     *
      * @throws IOException Wyjątek, który może być rzucony w przypadku problemów z wczytaniem plików.
      */
     public GamePanel() throws IOException
@@ -380,7 +464,7 @@ public class GamePanel extends JPanel implements Runnable
                         break;
                     }
                     player = new Player(width/2 + 15, height - 164);
-                    menu.loadGame();
+                    menu.loadSave();
                     platformArrayList.clear();
                     platformArrayList.add(new Platform(width/2, height - 100,"none"));
                     answer = generateQuiz();
@@ -437,6 +521,8 @@ public class GamePanel extends JPanel implements Runnable
     /**
      * Metoda rysująca elementy gry na ekranie.
      * Renderuje tło, platformy, gracza, pytania i odpowiedzi.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
      */
     public void paintComponent(Graphics g)
     {
@@ -736,6 +822,8 @@ public class GamePanel extends JPanel implements Runnable
 
     /**
      * Metoda obsługująca ruch platformy na której jest gracz w osi X aby ta wróciła do punktu wyjścia
+     *
+     * @throws IOException Wyjątek który może być rzucony w przypadku problemów z wczytaniem plików.
      */
     private void platformGoBack() throws IOException {
         for (Platform p : platformArrayList)
@@ -815,8 +903,12 @@ public class GamePanel extends JPanel implements Runnable
     }
 
     /**
-     * Metoda generująca listę współrzędnych tła gry.
-     * Ułatwia renderowanie tła w grze.
+     * Metoda generująca listę współrzędnych tła gry. Ułatwia renderowanie tła w grze
+     *
+     * @param background Obraz tła
+     * @param screenHeight Wysokość ekranu
+     * @param screenWidth Szerokość ekranu
+     * @return Zwrata listę zawierającą listy współrzędnych obrazów które są rysowane w tle
      */
     private List<List<Integer>> getBackgroundCords(Image background, int screenWidth, int screenHeight)
     {

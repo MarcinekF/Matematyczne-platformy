@@ -38,6 +38,10 @@ public class RewardManager {
 
     /**
      * Metoda rysująca nową nagrodę na ekranie.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
+     * @param screenHeight Wysokość ekranu
+     * @param screenWidth Szerokość ekranu
      */
     public void paintNewReward(Graphics g, int screenWidth, int screenHeight)
     {
@@ -69,6 +73,10 @@ public class RewardManager {
 
     /**
      * Metoda wyświetlająca ekran z przeglądem pucharów (nagród) dla gracza.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
+     * @param screenHeight Wysokość ekranu
+     * @param screenWidth Szerokość ekranu
      */
     public void showRewards(Graphics g, int screenWidth, int screenHeight)
     {

@@ -7,6 +7,13 @@ import java.awt.event.MouseListener;
 public class MouseHandler implements MouseListener
 {
     /**
+     * Konstruktor klasy MouseHandler
+     */
+    public MouseHandler()
+    {
+
+    }
+    /**
      * Obsługuje kliknięcie myszy.
      *
      * @param e Zdarzenie myszy.

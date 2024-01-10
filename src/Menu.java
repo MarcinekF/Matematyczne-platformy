@@ -31,6 +31,9 @@ public class Menu
 
     /**
      * Konstruktor klasy Menu.
+     *
+     * @param screenWidth Szerokosc ekranu
+     * @param screenHeight Wysokosc ekranu
      */
     public Menu(int screenWidth, int screenHeight)
     {
@@ -57,6 +60,8 @@ public class Menu
 
     /**
      * Metoda do wyświetlania menu w przypadku zatrzymania gry.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
      */
     public void gamePaused(Graphics g)
     {
@@ -80,6 +85,8 @@ public class Menu
 
     /**
      * Metoda do wyświetlania głównego menu gry.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
      */
     public void mainMenu(Graphics g)
     {
@@ -104,8 +111,7 @@ public class Menu
     /**
      * Wczytuje dane gry z pliku o określonej ścieżce.
      *
-     * @param g Ścieżka do pliku z zapisanymi danymi gry.
-     * @throws IOException Jeśli wystąpi problem z operacją wejścia/wyjścia podczas wczytywania gry.
+     * @param g Obiekt Graphics do rysowania na ekranie
      */
     public void loadGame(Graphics g)
     {
@@ -148,6 +154,8 @@ public class Menu
 
     /**
      * Metoda do tworzenia okna dla nowego zapisu gry.
+     *
+     * @param g Obiekt Graphics do rysowania na ekranie
      */
     public void createSave(Graphics g)
     {
@@ -175,8 +183,10 @@ public class Menu
 
     /**
      * Metoda do wczytywania danych gry z pliku.
-     * */
-    public void loadGame() throws IOException {
+     *
+     * @throws IOException Wyjątek rzucany gdy wystąpi problem z wczytaniem pliku graficznego
+     */
+    public void loadSave() throws IOException {
 
         String save = "saves/" + savesList[pickedAction].getName();
         try(BufferedReader br = new BufferedReader(new FileReader(save))){
@@ -202,6 +212,8 @@ public class Menu
 
     /**
      * Metoda do zapisywania danych gry do pliku.
+     *
+     * @param filePath Nazwa ścieżki gdzie ma zostać zapisany plik gry
      */
     public void saveGame(String filePath)
     {
